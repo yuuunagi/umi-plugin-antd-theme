@@ -5,7 +5,7 @@ import { IApi } from "umi";
 import { join } from "path";
 import serveStatic from "serve-static";
 import rimraf from "rimraf";
-import { existsSync, mkdirSync } from "fs";
+import { existsSync, mkdirSync,writeFileSync } from "fs";
 import defaultTheme from "./defaultTheme";
 
 const buildCss = require("antd-pro-merge-less");
@@ -55,6 +55,7 @@ export default function (api: IApi) {
   let options: {
     theme: themeConfig[];
     min?: boolean;
+    skip?: boolean;
   } = defaultTheme;
 
   // 从固定的路径去读取配置，而不是从 config 中读取
@@ -90,6 +91,10 @@ export default function (api: IApi) {
   api.onBuildComplete(({ err }) => {
     if (err) {
       return;
+    }
+    if(options.skip){
+        api.logger.info("💄 skip build theme");
+        return;
     }
     api.logger.info("💄  build theme");
 
@@ -127,16 +132,19 @@ export default function (api: IApi) {
     api.logger.info("💄  build theme");
     // 建立相关的临时文件夹
     try {
+       if (existsSync(winPath(join(themeTemp, "theme")))) {
+        throw '1'
+            rimraf.sync(winPath(join(themeTemp, "theme")));
+    } 
       if (existsSync(themeTemp)) {
         rimraf.sync(themeTemp);
       }
-      if (existsSync(winPath(join(themeTemp, "theme")))) {
-        rimraf.sync(winPath(join(themeTemp, "theme")));
-      }
+      
 
       mkdirSync(themeTemp);
 
       mkdirSync(winPath(join(themeTemp, "theme")));
+      writeFileSync(winPath(join(themeTemp, "theme",'.css')),' ')
     } catch (error) {
       // console.log(error);
     }
