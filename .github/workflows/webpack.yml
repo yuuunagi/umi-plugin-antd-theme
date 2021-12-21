@@ -32,5 +32,5 @@ jobs:
         # Artifact name
         name: dist
         # A file, directory or wildcard pattern that describes what to upload
-        path: /home/runner/work/umi-plugin-antd-theme/umi-plugin-antd-theme/dist
+        path: /home/runner/work/umi-plugin-antd-theme/umi-plugin-antd-theme/lib
         # The desired behavior if no files are found using the provided path.
